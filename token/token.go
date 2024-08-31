@@ -9,7 +9,7 @@ type Token struct {
 
 // Token types
 const (
-	ILLEGEL = "ILLEGAL" // token/char we dont know
+	ILLEGAL = "ILLEGAL" // token/char we dont know
 	EOF     = "EOF"     // inform parser to stop
 
 	IDENT = "IDENT" // variables names
@@ -31,3 +31,16 @@ const (
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
 )
+
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+// checks if identifier is a keyword or a user variable name
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
+}

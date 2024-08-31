@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"testing"
 
 	"interpreter/token"
@@ -10,8 +11,9 @@ func validateLexer(t *testing.T, input string, expectedResults []token.Token) {
 	l := New(input)
 
 	for _, expectedResult := range expectedResults {
+		fmt.Println(expectedResult)
 		tokenResult := l.NextToken()
-
+		fmt.Println(tokenResult)
 		if expectedResult.Type != tokenResult.Type {
 			t.Fatalf("lexer test - tokentype wrong. expected:%q, got %q", expectedResult.Type, tokenResult.Type)
 		}
@@ -65,7 +67,7 @@ func TestComplexNextToken(t *testing.T) {
 		{Type: token.LET, Literal: "let"},
 		{Type: token.IDENT, Literal: "add"},
 		{Type: token.ASSIGN, Literal: "="},
-		{Type: token.INT, Literal: "fn"},
+		{Type: token.FUNCTION, Literal: "fn"},
 		{Type: token.LPAREN, Literal: "("},
 		{Type: token.IDENT, Literal: "x"},
 		{Type: token.COMMA, Literal: ","},

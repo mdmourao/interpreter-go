@@ -100,3 +100,90 @@ func TestComplexNextToken(t *testing.T) {
 	validateLexer(t, input, expectedResults)
 
 }
+
+func Test01ComplexNextTolen(t *testing.T) {
+	input := `!-/*5;
+			5 < 10 > 5;`
+
+	expectedResults := []token.Token{
+		// !-/*5;
+		{Type: token.BANG, Literal: "!"},
+		{Type: token.MINUS, Literal: "-"},
+		{Type: token.SLASH, Literal: "/"},
+		{Type: token.ASTERISK, Literal: "*"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
+		// 5 < 10 > 5;`
+		{Type: token.INT, Literal: "5"},
+		{Type: token.LT, Literal: "<"},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.GT, Literal: ">"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
+		{Type: token.EOF, Literal: ""},
+	}
+	validateLexer(t, input, expectedResults)
+}
+
+func TestIfElseNextTolen(t *testing.T) {
+	input := `if (5 < 10) {
+				return true;
+			} else {
+				return false;
+			}
+			`
+
+	expectedResults := []token.Token{
+		// if (5 < 10) {
+		{Type: token.IF, Literal: "if"},
+		{Type: token.LPAREN, Literal: "("},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.LT, Literal: "<"},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.RPAREN, Literal: ")"},
+		{Type: token.LBRACE, Literal: "{"},
+
+		// return true;
+		{Type: token.RETURN, Literal: "return"},
+		{Type: token.TRUE, Literal: "true"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
+		// } else {
+		{Type: token.RBRACE, Literal: "}"},
+		{Type: token.ELSE, Literal: "else"},
+		{Type: token.LBRACE, Literal: "{"},
+
+		// return false;
+		{Type: token.RETURN, Literal: "return"},
+		{Type: token.FALSE, Literal: "false"},
+		{Type: token.SEMICOLON, Literal: ";"},
+		// }
+		{Type: token.RBRACE, Literal: "}"},
+
+		{Type: token.EOF, Literal: ""},
+	}
+	validateLexer(t, input, expectedResults)
+}
+
+func TestIfAssertTolen(t *testing.T) {
+	input := `10 == 10;
+			7 != 9;
+			`
+
+	expectedResults := []token.Token{
+		{Type: token.INT, Literal: "10"},
+		{Type: token.EQ, Literal: "=="},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
+		{Type: token.INT, Literal: "7"},
+		{Type: token.NOT_EQ, Literal: "!="},
+		{Type: token.INT, Literal: "9"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
+		{Type: token.EOF, Literal: ""},
+	}
+	validateLexer(t, input, expectedResults)
+}
